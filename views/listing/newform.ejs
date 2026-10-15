@@ -1,19 +1,70 @@
 <% layout("/layouts/boilerplate.ejs") -%>
 <body>
-    <h3>new form</h3>
+    <h3 class="new-form">New Form</h3>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <form action="/listing" method="post" novalidate class="needs-validation">
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="listing[title]" placeholder="write title" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Select a new title!
+                    </div>
+                </div>
 
-    <form action="/listing" method="post">
-        <input type="text" name="listing[title]" placeholder="write title">;
-        <br><br>
-        <textarea name="listing[description]" placeholder="desc"></textarea>
-        <br><br>
-        <input type="text" name="listing[image]" placeholder="image">
-        <br><br>
-        <input type="number" name="listing[price]" placeholder="write number">;
-        <br><br>
-        <input type="text" name="listing[location]" placeholder="write location">;
-        <br><br>
-        <input type="text" name="listing[country]" placeholder="write country">;<br> <br>
-        <button>submit</button>
-    </form>
+                <div class="mb-3">
+                    <label for="description" class="form-label">description</label>
+                    <textarea name="listing[description]" class="form-control" placeholder="description" required></textarea>
+                    <div class="invalid-feedback">
+                        empty not allowed!
+                    </div>
+                    <div class="valid-feedback">
+                        lookes good!
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="Image" class="form-label">Image</label>
+                    <input type="text" class="form-control" name="listing[image]" placeholder="image">
+                </div>
+
+                <div class="row ">
+                    <div class="mb-3 col-md-4">
+                        <label for="price" class="form-label">price</label>
+                        <input type="number" class="form-control" name="listing[price]" placeholder="write price" required>
+                        <div class="invalid-feedback">
+                            write a valid number
+                        </div>
+                        <div class="valid-feedback">
+                            Price required!
+                        </div>
+                    </div>
+                    <div class="mb-3 col-md-8">
+                        <label for="country" class="form-label">country</label>
+                        <input type="text" class="form-control" name="listing[country]" placeholder="write country" required>
+                        <div class="valid-feedback">
+                            lookes good!
+                        </div>
+                        <div class="invalid-feedback">
+                            empty not allowed!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 ">
+                    <label for="location" class="form-label">location</label>
+                    <input type="text" class="form-control" name="listing[location]" placeholder="write location" required>
+                    <div class="invalid-feedback">
+                        Please select a valid location.
+                    </div>
+                </div>
+                <button class="btn btn-dark" >submit</button>
+            </form>
+        </div>
+    </div>
+    
 </body>

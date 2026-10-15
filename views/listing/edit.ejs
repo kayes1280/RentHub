@@ -1,20 +1,67 @@
 <% layout("/layouts/boilerplate.ejs") -%>
 <body>
-    <h3>new form</h3>
-
-    <form action="/listing/<%= listing._id %>?_method=PUT" method="post">
-        <input type="text" name="listing[title]" value="<%= listing.title %>">;
-        <br><br>
-        <textarea name="listing[description]" ><%= listing.description %></textarea>
-        <br><br>
-        <input type="text" name="listing[image]" value="<%= listing.image %>">
-        <br><br>
-        <input type="number" name="listing[price]" value="<%= listing.price %>">;
-        <br><br>
-        <input type="text" name="listing[location]" value="<%= listing.location %>">;
-        <br><br>
-        <input type="text" name="listing[country]" value="<%= listing.country %>">;
-        <br> <br>
-        <button>edit</button>
-    </form>
+    <h3 class="new-form">New Form</h3>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <form action="/listing/<%= listing._id %>?_method=PUT" method="post" novalidate class="needs-validation">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="listing[title]" value="<%= listing.title %>" required>
+                    <div class="invalid-feedback">
+                        write a valid title
+                    </div>
+                    <div class="valid-feedback">
+                        title is good !
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="Description" class="form-label">Description</label>
+                    <textarea class="form-control" name="listing[description]"  required><%= listing.description %></textarea>
+                    <div class="invalid-feedback">
+                        write a description
+                    </div>
+                    <div class="valid-feedback">
+                        good !
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="Image" class="form-label">Image</label>
+                    <input type="text" class="form-control" name="listing[image]" value="<%= listing.image %>" required>
+                </div>
+                <div class="row ">
+                    <div class="mb-3 col-md-4">
+                        <label for="number" class="form-label">price</label>
+                        <input type="number" class="form-control" name="listing[price]" placeholder="write price" value="<%= listing.price %>" required>
+                        <div class="invalid-feedback">
+                            required country
+                        </div>
+                        <div class="valid-feedback">
+                            good !
+                        </div>
+                    </div>
+                    <div class="mb-3 col-md-8">
+                        <label for="country" class="form-label">country</label>
+                        <input type="text" class="form-control" name="listing[country]" placeholder="write country" value="<%= listing.country %>" reuqired>
+                        <div class="invalid-feedback">
+                            required country !
+                        </div>
+                        <div class="valid-feedback">
+                            lookes good !
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" name="listing[location]" class="form-control" value="<%= listing.location %>" required>
+                    <div class="invalid-feedback">
+                        required country
+                    </div>
+                    <div class="valid-feedback">
+                        lookes good !
+                    </div>
+                </div>
+                <button class="btn btn-dark" >Edit</button>
+            </form>
+        </div>
+    </div>
 </body>

@@ -1,5 +1,11 @@
 body {
     background-color: beige;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container{
+    flex: 1;
 }
 .fa-compass{
     color:red;
@@ -16,8 +22,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 10rem;
-    background-color: aliceblue;
+    background-color: rgb(208, 210, 211);
     margin-top: 5rem;
 }
 .footer_name{
@@ -38,7 +43,7 @@ body {
     border-radius: 10px;
     width: auto !important;
 }
-.card{
+.listing-card{
     border: none !important;
     margin-top: 2rem !important;
 }
@@ -57,4 +62,17 @@ body {
 .card-img-overlay:hover{
     opacity: 0.2;
     background-color: white;
+}
+.new-form{
+    text-align: center;
+    margin-bottom: 30px;
+}
+/* show image */
+.show-image{
+    height: 20rem;
+    border-radius: 10px;
+}
+.show-btn{
+    display: flex;
+    column-gap: 10px;
 }

@@ -1,10 +1,22 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressError.js");
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
+const session = require("express-session");
+const flash = require("connect-flash");
+
+
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -13,6 +25,27 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
+
+const sessionOptions = {
+    secret: "mysupersecretcode",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+    },
+};
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 main().then(() => {console.log("mongoose are connected")})
 .catch(err => {
@@ -26,49 +59,38 @@ async function main(){
 app.get("/" , (req, res) => {
     res.send("app are working now");
 });
-// all list
-app.get("/listing", async (req, res) => {
-    const allListing = await Listing.find({});
-    res.render("listing/index.ejs", { allListing });
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
+    next();
+})
+
+// app.get("/demouser", async (req, res) => {
+//     let fakeuser = new User({
+//         email: "kayes@gmail.com",
+//         username: "kayeskhan",
+//     });
+//     let regiUser = await User.register(fakeuser, "kayeskhan");
+//     res.send(regiUser);
+// })
+
+app.use("/listing", listingRouter);
+app.use("/listing/:id/reviews", reviewRouter);
+app.use("/", userRouter);
+
+
+// for all error handler
+app.use((req, res, next)=> {
+    next(new ExpressError(404, "page not found!"));
 });
 
-// new form 
-app.get("/listing/newform", (req, res) => {
-    res.render("listing/newform.ejs");
-})
-
-
-//  show routes details
-app.get("/listing/:id", async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listing/show.ejs", { listing });
-});
-
-// submit form
-app.post("/listing", async (req, res) => {
-    let listing = new Listing(req.body.listing);
-    await listing.save();
-    res.redirect("/listing");
-})
-
-// edit form
-app.get("/listing/:id/edit", async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listing/edit.ejs" , { listing });
-})
-// edit form submit
-app.put("/listing/:id", async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/listing/${id}`);
-})
-// delete
-app.delete("/listing/:id", async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect("/listing");
+// error handler
+app.use((err, req, res, next)=> {
+    let { status = 404 , message = " something went wrong !"} = err;
+    res.status(status).render("showError.ejs", { message });
+    // res.status(status).send(message);
 })
 
 // app.get("/testListing", async (req, res) => {
