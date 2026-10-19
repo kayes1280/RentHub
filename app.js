@@ -56,9 +56,9 @@ async function main(){
     await mongoose.connect('mongodb://127.0.0.1:27017/renthub');
 }
 
-app.get("/" , (req, res) => {
-    res.send("app are working now");
-});
+// app.get("/" , (req, res) => {
+//     res.send("app are working now");
+// });
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
